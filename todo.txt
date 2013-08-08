@@ -1,0 +1,11 @@
+Pokrycie UC
+nazwa UC | ilosc powiazanych testow | ilosc powiazanych screenow | dlugosc summary
+
+Kompletnosc dokumentacji testow
+nazwa testu | ilosc powiazanych UC | ilosc powiazanych screenow | dlugosc summary
+
+Niepowiazane obiekty:
+Nazwa | typ
+
+Puste pakiety
+Nazwa
