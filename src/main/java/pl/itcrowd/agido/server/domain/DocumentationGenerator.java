@@ -6,11 +6,10 @@ import freemarker.template.Template;
 import freemarker.template.TemplateHashModel;
 import org.apache.commons.io.IOUtils;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import javax.imageio.ImageIO;
-
 import java.io.FileOutputStream;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -19,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class DocumentationGenerator {
+
     public static void main(String[] args)
     {
         Project project = new Project();
@@ -143,11 +143,9 @@ public class DocumentationGenerator {
 
         Numbering numbering = new Numbering();
 
-
-       try {
-           freemarkerDo(package1, numbering, "src/main/resources/documentation.ftl");
-        }
-        catch(Exception e) {
+        try {
+            freemarkerDo(package1, numbering, "src/main/resources/documentation.ftl");
+        } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
         }
     }
@@ -169,104 +167,22 @@ public class DocumentationGenerator {
         datamodel.put("numbering", numbering);
         tpl.process(datamodel, output);
         System.out.println(output);
-        IOUtils.write(output.toString(),new FileOutputStream("output.html"));
+        IOUtils.write(output.toString(), new FileOutputStream("output.html"));
     }
 
-    static byte[] readImageToByte(String filePath){
-        try{
+    static byte[] readImageToByte(String filePath)
+    {
+        try {
             File file = new File(filePath);
             BufferedImage image = ImageIO.read(file);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(image, "png", baos);
             return baos.toByteArray();
-
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Some problem has occurred.");
             return null;
         }
     }
-
-//    public static class Levels{
-//        private List<Integer> indexes = new ArrayList<Integer>();
-//        private List<String> stringIndexes = new ArrayList<String>();
-//
-//        public void setLevels(Package package_, String parentIndex){
-//            if(indexes.isEmpty()){
-//                indexes.add(1);
-//                parentIndex = "1";
-//                stringIndexes.add(parentIndex);
-//            }
-//            for (int i=1; i <= package_.getSubpackages().size(); i++){
-//                indexes.add(i);
-//                stringIndexes.add(parentIndex + "." + Integer.toString(i));
-//                setLevels(package_.getSubpackages().iterator().next(), parentIndex + "." + Integer.toString(i));
-//            }
-//        }
-//
-//        public List<Integer> getIndexes(){
-//            return indexes;
-//        }
-//
-//        public List<String> getStringIndexes(){
-//            return stringIndexes;
-//        }
-//
-//    }
 }
-//    public static class Directory {
-//        private String name;
-//        private List<Directory> subDirectories;
-//        private List<Usecase> usecases;
-//        private List<Test> tests;
-//        private boolean hasChildren = false;
-//
-//        public Directory (Package pack){
-//            this.name = pack.getName();
-//
-//            if(pack.isHasChildren()){
-//                this.hasChildren = true;
-//                int childrensNumber = pack.getSubpackages().size();
-//                Object[] childrens = pack.getSubpackages().toArray();
-//
-//                subDirectories = new ArrayList<Directory>();
-//                for (int i = 0; i < childrensNumber; i++){
-//                    subDirectories.add(new Directory((Package)childrens[i]));
-//                }
-//            }
-//
-//            if(pack.getUsecases().size() != 0){
-//                usecases = new ArrayList<Usecase>();
-//
-//                for (Usecase usecase_ : pack.getUsecases()){
-//                    usecases.add((usecase_));
-//                }
-//            }
-//
-//            if(pack.getTests().size() != 0){
-//                tests = new ArrayList<Test>();
-//
-//                for (Test test_ : pack.getTests()){
-//                    tests.add(test_);
-//                }
-//            }
-//        }
-//
-//        public String getName(){
-//            return this.name;
-//        }
-//
-//        public List<Directory> getSubDirectories(){
-//            return subDirectories;
-//        }
-//
-//        public boolean isHasChildren(){
-//            return hasChildren;
-//        }
-//
-//        public List<Usecase> getUsecases(){
-//            return usecases;
-//        }
-//    }
 

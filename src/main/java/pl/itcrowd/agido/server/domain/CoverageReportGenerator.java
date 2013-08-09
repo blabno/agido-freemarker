@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class CoverageReportGenerator {
+
     public static void main(String[] args)
     {
         Project project = new Project();
@@ -143,7 +144,7 @@ public class CoverageReportGenerator {
         List<Structure> unassignedObjects = new ArrayList<Structure>();
         List<Structure> emptyPackages = new ArrayList<Structure>();
 
-        //Creating summary of Packages, Usecases, and Tests
+        //Gathering information about Packages, Usecases, and Tests
         getEmptyPackages(package1, emptyPackages);
         getUnassignedObjects(package1, unassignedObjects);
         getUsecasesCoverage(package1, usecasesInfo);
@@ -151,13 +152,12 @@ public class CoverageReportGenerator {
 
         try {
             freemarkerDo(emptyPackages, unassignedObjects, usecasesInfo, testsInfo, project, "src/main/resources/coverageReport.ftl");
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
         }
     }
 
-    static void getEmptyPackages (Package currentPackage, List<Structure> emptyPackagesList)
+    static void getEmptyPackages(Package currentPackage, List<Structure> emptyPackagesList)
     {
         if ((currentPackage.getTests().size() == 0) && (currentPackage.getUsecases().size() == 0) && (currentPackage.getSubpackages().size() == 0)) {
             emptyPackagesList.add(new Structure(currentPackage));
@@ -167,20 +167,20 @@ public class CoverageReportGenerator {
         }
     }
 
-    static void getUnassignedObjects (Package currentPackage, List<Structure> unassignedObjects)
+    static void getUnassignedObjects(Package currentPackage, List<Structure> unassignedObjects)
     {
-        for(Test test : currentPackage.getTests()) {
-            if(test.getUsecases().size() == 0) {
+        for (Test test : currentPackage.getTests()) {
+            if (test.getUsecases().size() == 0) {
                 unassignedObjects.add(new Structure(test));
             }
         }
-        for(Usecase usecase : currentPackage.getUsecases()) {
-            if(usecase.getTests().size() == 0) {
+        for (Usecase usecase : currentPackage.getUsecases()) {
+            if (usecase.getTests().size() == 0) {
                 unassignedObjects.add(new Structure(usecase));
             }
         }
-        for(Screen screen : currentPackage.getScreens()) {
-            if(screen.getUsecases().size() == 0) {
+        for (Screen screen : currentPackage.getScreens()) {
+            if (screen.getUsecases().size() == 0) {
                 unassignedObjects.add(new Structure(screen));
             }
         }
@@ -189,9 +189,9 @@ public class CoverageReportGenerator {
         }
     }
 
-    static void getUsecasesCoverage (Package currentPackage, List<UsecaseInfo> usecasesInfoList)
+    static void getUsecasesCoverage(Package currentPackage, List<UsecaseInfo> usecasesInfoList)
     {
-        for(Usecase usecase : currentPackage.getUsecases()) {
+        for (Usecase usecase : currentPackage.getUsecases()) {
             usecasesInfoList.add(new UsecaseInfo(usecase));
         }
         for (Package subpackage : currentPackage.getSubpackages()) {
@@ -199,9 +199,9 @@ public class CoverageReportGenerator {
         }
     }
 
-    static void getTestsCoverage (Package currentPackage, List<TestInfo> testsInfoList)
+    static void getTestsCoverage(Package currentPackage, List<TestInfo> testsInfoList)
     {
-        for(Test test : currentPackage.getTests()) {
+        for (Test test : currentPackage.getTests()) {
             testsInfoList.add(new TestInfo(test));
         }
         for (Package subpackage : currentPackage.getSubpackages()) {
@@ -209,8 +209,8 @@ public class CoverageReportGenerator {
         }
     }
 
-    static void freemarkerDo(List<Structure> emptyPackages, List<Structure> unassignedObjects, List<UsecaseInfo> usecasesInfo,
-                             List<TestInfo> testsInfo, Project project, String template) throws Exception
+    static void freemarkerDo(List<Structure> emptyPackages, List<Structure> unassignedObjects, List<UsecaseInfo> usecasesInfo, List<TestInfo> testsInfo,
+                             Project project, String template) throws Exception
     {
         Configuration cfg = new Configuration();
         Template tpl = cfg.getTemplate(template);
@@ -227,24 +227,28 @@ public class CoverageReportGenerator {
         IOUtils.write(output.toString(), new FileOutputStream("coverage_report.html"));
     }
 
-    public static class UsecaseInfo{
+    public static class UsecaseInfo {
+
         private String name;
+
         private Integer testsNumber;
+
         private Integer screensNumber;
+
         private Integer summaryLength;
 
-        public  UsecaseInfo()
-        {}
+        public UsecaseInfo()
+        {
+        }
 
         public UsecaseInfo(Usecase usecase)
         {
             name = usecase.getName();
             testsNumber = usecase.getTests().size();
             screensNumber = usecase.getScreens().size();
-            if(usecase.getSummary() == null) {
+            if (usecase.getSummary() == null) {
                 this.summaryLength = 0;
-            }
-            else {
+            } else {
                 this.summaryLength = usecase.getSummary().length();
             }
         }
@@ -290,22 +294,25 @@ public class CoverageReportGenerator {
         }
     }
 
-    public static class TestInfo{
+    public static class TestInfo {
+
         private String name;
+
         private Integer usecasesNumber;
+
         private Integer summaryLength;
 
         public TestInfo()
-        {}
+        {
+        }
 
         public TestInfo(Test test)
         {
             this.name = test.getName();
             this.usecasesNumber = test.getUsecases().size();
-            if(test.getSummary() == null) {
+            if (test.getSummary() == null) {
                 this.summaryLength = 0;
-            }
-            else {
+            } else {
                 this.summaryLength = test.getSummary().length();
             }
         }
@@ -341,8 +348,10 @@ public class CoverageReportGenerator {
         }
     }
 
-    public static class Structure{
+    public static class Structure {
+
         private String name;
+
         private String type;
 
         Structure(Package package_)
@@ -389,5 +398,4 @@ public class CoverageReportGenerator {
             this.type = type;
         }
     }
-
 }
