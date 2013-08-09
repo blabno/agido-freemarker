@@ -167,7 +167,7 @@ public class DocumentationGenerator {
         datamodel.put("numbering", numbering);
         tpl.process(datamodel, output);
         System.out.println(output);
-        IOUtils.write(output.toString(), new FileOutputStream("output.html"));
+        IOUtils.write(output.toString(), new FileOutputStream("documentation.html"));
     }
 
     static byte[] readImageToByte(String filePath)
